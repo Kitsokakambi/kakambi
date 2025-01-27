@@ -62,9 +62,9 @@ jobs:
     - name: Deploy to Azure AKS
       uses: azure/aks-set-context@v1
       with:
-        resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
-        cluster-name: ${{ secrets.AZURE_AKS_CLUSTER }}
-        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        resource-group: RGroup
+        cluster-name: RGroup-aks
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     # Build Docker images for Node.js and PHP apps
     - name: Build Docker image for Node.js
