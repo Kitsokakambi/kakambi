@@ -1,0 +1,6 @@
+[submodule "sample-nodejs"]
+	path = sample-nodejs
+	url = https://github.com/Kitsokakambi/sample-nodejs.git
+[submodule "sample-php"]
+	path = sample-php
+	url = https://github.com/Kitsokakambi/sample-php.git
