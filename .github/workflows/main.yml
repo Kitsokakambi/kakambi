@@ -131,11 +131,12 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    # Wait for applications to be up and running
+    # Check if the Node.js application is ready
     - name: Wait for Node.js application to be ready
       run: |
-        kubectl rollout status deployment/sample-nodejs
+        kubectl rollout status deployment/sample-nodejs-sample-nodejs --timeout=5m
 
+    # Check if the PHP application is ready
     - name: Wait for PHP application to be ready
       run: |
-        kubectl rollout status deployment/sample-php
+        kubectl rollout status deployment/sample-php-sample-php --timeout=5m
