@@ -97,15 +97,14 @@ jobs:
         submodules: 'recursive' # Ensure submodules are also checked out
 
     # Set up Azure CLI
-    - name: Install Azure CLI
-      run: |
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    - name: Set up Azure CLI
+      uses: azure/login@v1
 
-    # Log in to Azure using service principal credentials
-    - name: Log in to Azure
+    # Login to Azure using service principal credentials
+    - name: Login to Azure
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}  # Ensure your credentials are saved as AZURE_CREDENTIALS in GitHub secrets
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     # Get AKS credentials
     - name: Get AKS credentials
@@ -131,11 +130,19 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    # Wait for applications to be up and running
+    # Install kubectl
+    - name: Install kubectl
+      run: |
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.5/bin/linux/amd64/kubectl
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+
+    # Wait for Node.js application to be ready
     - name: Wait for Node.js application to be ready
       run: |
         kubectl rollout status deployment/sample-nodejs
 
+    # Wait for PHP application to be ready
     - name: Wait for PHP application to be ready
       run: |
         kubectl rollout status deployment/sample-php
