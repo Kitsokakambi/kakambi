@@ -97,17 +97,15 @@ jobs:
         submodules: 'recursive' # Ensure submodules are also checked out
 
     # Set up Azure CLI
-    - name: Set up Azure CLI
-      uses: azure/login@v1
+    - name: Install Azure CLI
+      run: |
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-    # Login to Azure using service principal credentials
-    - name: Login to Azure
+    # Log in to Azure using service principal credentials
+    - name: Log in to Azure
       uses: azure/login@v1
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}  # Ensure your credentials are saved as AZURE_CREDENTIALS in GitHub secrets
 
     # Get AKS credentials
     - name: Get AKS credentials
