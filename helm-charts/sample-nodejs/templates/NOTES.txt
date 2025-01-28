@@ -1,0 +1,11 @@
+{{- if .Release.IsUpgrade }}
+  # Upgrade Notes
+  Congratulations, you have upgraded the release!
+{{- else }}
+  # Installation Notes
+  Welcome to the sample-nodejs application!
+{{- end }}
+
+# Application Details
+Name: {{ include "sample-nodejs.fullname" . }}
+Namespace: {{ .Release.Namespace }}

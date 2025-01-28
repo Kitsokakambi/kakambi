@@ -1,0 +1,20 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "sample-php.fullname" . }}
+  labels:
+    {{- include "sample-php.labels" . | nindent 4 }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.host | default "default.host.com" }}  # Use default host if not defined
+      http:
+        paths:
+          - path: {{ .Values.ingress.path | default "/" }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "sample-php.fullname" . }}
+                port:
+                  number: 80
+{{- end }}
