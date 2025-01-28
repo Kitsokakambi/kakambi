@@ -10,7 +10,7 @@ on:
 
 jobs:
   checkout:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     # Checkout the main repository including submodules
@@ -20,7 +20,7 @@ jobs:
         submodules: 'recursive' # Ensure submodules are also checked out
 
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     # Checkout the main repository including submodules
@@ -98,7 +98,7 @@ jobs:
 
     # Set up Azure CLI
     - name: Set up Azure CLI
-      uses: azure/cli-action@v1
+      uses: azure/setup-azurecli@v1
 
     # Login to Azure using service principal credentials
     - name: Login to Azure
