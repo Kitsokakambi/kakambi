@@ -1,12 +1,12 @@
 param virtualMachines_RGroup_vm_name string = 'RGroup-vm'
-param disks_RGroup_vm_OsDisk_1_2bd3c9ea6ee9455bb02dbaf85d2b2032_externalid string = '/subscriptions/e285b4d1-e4e3-4587-b03c-99a6d32d980d/resourceGroups/RGroup/providers/Microsoft.Compute/disks/RGroup-vm_OsDisk_1_2bd3c9ea6ee9455bb02dbaf85d2b2032'
-param networkInterfaces_rgroup_vm897_z1_externalid string = '/subscriptions/e285b4d1-e4e3-4587-b03c-99a6d32d980d/resourceGroups/RGroup/providers/Microsoft.Network/networkInterfaces/rgroup-vm897_z1'
+param disks_RGroup_vm_disk1_78b9f6597a984e4d90ad9ee7f8df1495_externalid string = '/subscriptions/c3931323-f786-40e8-835f-58ec309c6265/resourceGroups/RGROUP/providers/Microsoft.Compute/disks/RGroup-vm_disk1_78b9f6597a984e4d90ad9ee7f8df1495'
+param networkInterfaces_rgroup_vm598_z2_externalid string = '/subscriptions/c3931323-f786-40e8-835f-58ec309c6265/resourceGroups/RGroup/providers/Microsoft.Network/networkInterfaces/rgroup-vm598_z2'
 
 resource virtualMachines_RGroup_vm_name_resource 'Microsoft.Compute/virtualMachines@2024-07-01' = {
   name: virtualMachines_RGroup_vm_name
   location: 'eastus'
   zones: [
-    '1'
+    '2'
   ]
   properties: {
     hardwareProfile: {
@@ -24,20 +24,22 @@ resource virtualMachines_RGroup_vm_name_resource 'Microsoft.Compute/virtualMachi
       }
       osDisk: {
         osType: 'Linux'
-        name: '${virtualMachines_RGroup_vm_name}_OsDisk_1_2bd3c9ea6ee9455bb02dbaf85d2b2032'
+        name: '${virtualMachines_RGroup_vm_name}_disk1_78b9f6597a984e4d90ad9ee7f8df1495'
         createOption: 'FromImage'
         caching: 'ReadWrite'
         managedDisk: {
-          id: disks_RGroup_vm_OsDisk_1_2bd3c9ea6ee9455bb02dbaf85d2b2032_externalid
+          storageAccountType: 'Premium_LRS'
+          id: disks_RGroup_vm_disk1_78b9f6597a984e4d90ad9ee7f8df1495_externalid
         }
         deleteOption: 'Delete'
+        diskSizeGB: 30
       }
       dataDisks: []
       diskControllerType: 'SCSI'
     }
     osProfile: {
       computerName: virtualMachines_RGroup_vm_name
-      adminUsername: 'adminuser1'
+      adminUsername: 'azureuser1'
       linuxConfiguration: {
         disablePasswordAuthentication: false
         provisionVMAgent: true
@@ -60,7 +62,7 @@ resource virtualMachines_RGroup_vm_name_resource 'Microsoft.Compute/virtualMachi
     networkProfile: {
       networkInterfaces: [
         {
-          id: networkInterfaces_rgroup_vm897_z1_externalid
+          id: networkInterfaces_rgroup_vm598_z2_externalid
           properties: {
             deleteOption: 'Detach'
           }

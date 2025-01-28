@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_RGroup_vm_name": {
+            "value": null
+        },
+        "disks_RGroup_vm_disk1_78b9f6597a984e4d90ad9ee7f8df1495_externalid": {
+            "value": null
+        },
+        "networkInterfaces_rgroup_vm598_z2_externalid": {
+            "value": null
+        }
+    }
+}
