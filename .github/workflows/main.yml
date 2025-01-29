@@ -137,16 +137,4 @@ jobs:
       run: |
         helm upgrade --install sample-php ./helm-charts/sample-php --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/sample-php --set image.tag=latest
 
-  post-deployment:
-    runs-on: self-hosted
-
-    steps:
-    # Check if the Node.js application is ready
-    - name: Wait for Node.js application to be ready
-      run: |
-        kubectl rollout status deployment/sample-nodejs --timeout=5m
-
-    # Check if the PHP application is ready
-    - name: Wait for PHP application to be ready
-      run: |
-        kubectl rollout status deployment/sample-php --timeout=5m
+  
