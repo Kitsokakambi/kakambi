@@ -4,3 +4,6 @@
 [submodule "sample-php"]
 	path = sample-php
 	url = https://github.com/Kitsokakambi/sample-php.git
+[submodule "dotnet-hello-world"]
+	path = dotnet-hello-world
+	url = https://github.com/Kitsokakambi/dotnet-hello-world.git
