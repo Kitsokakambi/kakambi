@@ -13,58 +13,25 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    # Checkout the main repository including submodules
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        submodules: 'recursive' # Ensure submodules are also checked out
-
-  build:
-    runs-on: self-hosted
-
-    steps:
-    # Checkout the main repository including submodules
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
         submodules: 'recursive'
 
-    # Set up Node.js for the Node.js app
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
       with:
-        node-version: '16'  # Specify the version of Node.js you want to use
+        submodules: 'recursive'
 
-    # Install dependencies and run tests for Node.js app
-    - name: Install Node.js dependencies
-      working-directory: ./sample-nodejs
-      run: |
-        npm install
-
-    - name: Run tests for Node.js
-      working-directory: ./sample-nodejs
-      run: |
-        npm test
-
-    # Set up PHP for the PHP app
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.0'  # Specify the version of PHP you want to use
-
-    # Install dependencies for PHP app (assuming using Composer)
-    - name: Install PHP dependencies
-      working-directory: ./sample-php
-      run: |
-        composer install
-
-    # Set up .NET SDK for the .NET app
     - name: Set up .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '6.0'  # Specify the .NET SDK version
+        dotnet-version: '6.0'
 
-    # Restore, build, and test .NET application
     - name: Restore .NET dependencies
       working-directory: ./dotnet-hello-world
       run: |
@@ -80,54 +47,22 @@ jobs:
       run: |
         dotnet test --configuration Release
 
-    # Build Docker images for Node.js and PHP apps
-    - name: Build Docker image for Node.js
-      working-directory: ./sample-nodejs
-      run: |
-        docker build -t sample-nodejs:latest .
-
-    - name: Build Docker image for PHP
-      working-directory: ./sample-php
-      run: |
-        docker build -t sample-php:latest . 
-
     - name: Build Docker image for .NET
       working-directory: ./dotnet-hello-world
       run: |
         docker build -t sample-dotnet:latest .
-
-    # Tag Docker images to ACR
-    - name: Tag Docker image to ACR (Node.js)
-      working-directory: ./sample-nodejs
-      run: |
-        docker tag sample-nodejs:latest ${{ secrets.ACR_NAME }}.azurecr.io/sample-nodejs:latest
-        
-    - name: Tag Docker image to ACR (PHP)
-      working-directory: ./sample-php
-      run: |
-        docker tag sample-php:latest ${{ secrets.ACR_NAME }}.azurecr.io/sample-php:latest
 
     - name: Tag Docker image to ACR (Dotnet)
       working-directory: ./dotnet-hello-world
       run: |
         docker tag sample-dotnet:latest ${{ secrets.ACR_NAME }}.azurecr.io/sample-dotnet:latest
 
-    # Log in to Azure Container Registry (ACR)
     - name: Log in to Azure Container Registry
       uses: azure/docker-login@v1
       with:
         login-server: ${{ secrets.ACR_NAME }}.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-
-    # Push Docker images to ACR
-    - name: Push Docker image for Node.js to ACR
-      run: |
-        docker push ${{ secrets.ACR_NAME }}.azurecr.io/sample-nodejs:latest
-
-    - name: Push Docker image for PHP to ACR
-      run: |
-        docker push ${{ secrets.ACR_NAME }}.azurecr.io/sample-php:latest
 
     - name: Push Docker image for .NET to ACR
       run: |
@@ -137,44 +72,20 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    # Checkout the main repository including submodules
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        submodules: 'recursive' # Ensure submodules are also checked out
+        submodules: 'recursive'
 
-    # Set up Azure CLI
     - name: Install Azure CLI
       run: |
         curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-    # Log in to Azure using service principal credentials
     - name: Log in to Azure
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}  # Ensure your credentials are saved as AZURE_CREDENTIALS in GitHub secrets
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # Get AKS credentials
-    - name: Get AKS credentials
-      run: |
-        az aks get-credentials --resource-group RGroup --name RGroup-aks
-
-    # Install Helm
-    - name: Install Helm
-      run: |
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-    # Deploy the Node.js application using Helm
-    - name: Deploy Node.js app to AKS
-      run: |
-        helm upgrade --install sample-nodejs ./helm-charts/sample-nodejs --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/sample-nodejs --set image.tag=latest
-
-    # Deploy the PHP application using Helm
-    - name: Deploy PHP app to AKS
-      run: |
-        helm upgrade --install sample-php ./helm-charts/sample-php --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/sample-php --set image.tag=latest
-
-    # Deploy the .NET application to Azure App Service
     - name: Deploy .NET app to Azure App Service
       run: |
-        az webapp up --name hello-world-api --resource-group RGroup --plan MyAppServicePlan --sku F1 --location eastus
+        az webapp create --name hello-world-api --resource-group RGroup --plan MyAppServicePlan --runtime 'DOTNET|6.0' --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/sample-dotnet:latest
