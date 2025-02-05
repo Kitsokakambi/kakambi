@@ -81,4 +81,4 @@ jobs:
 
     - name: Deploy .NET app to Azure App Service
       run: |
-        az webapp create --name hello-world-api --resource-group RGroup --plan MyAppServicePlan --runtime 'DOTNET|9.0' --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/sample-dotnet:latest
+        az webapp config container set --name hello-world-api --resource-group RGroup --plan MyAppServicePlan --runtime 'DOTNET|9.0' --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/sample-dotnet:latest
