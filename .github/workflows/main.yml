@@ -30,7 +30,7 @@ jobs:
     - name: Set up .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0'
+        dotnet-version: '9.0'
 
     - name: Restore .NET dependencies
       working-directory: ./dotnet-hello-world
@@ -88,4 +88,4 @@ jobs:
 
     - name: Deploy .NET app to Azure App Service
       run: |
-        az webapp create --name hello-world-api --resource-group RGroup --plan MyAppServicePlan --runtime 'DOTNET|8.0' --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/sample-dotnet:latest
+        az webapp create --name hello-world-api --resource-group RGroup --plan MyAppServicePlan --runtime 'DOTNET|9.0' --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/sample-dotnet:latest
