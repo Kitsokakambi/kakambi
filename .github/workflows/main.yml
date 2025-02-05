@@ -48,7 +48,7 @@ jobs:
 
     - name: Build Docker image for .NET
       working-directory: ./dotnet-hello-world
-      run: docker build -t sample-dotnet:latest .
+      run: docker build -t sample-dotnet:latest -f ./hello-world-api/Dockerfile .
 
     - name: Tag Docker image to ACR (Dotnet)
       working-directory: ./dotnet-hello-world
